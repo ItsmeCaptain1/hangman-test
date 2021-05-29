@@ -19,6 +19,7 @@ def is_word_guessed(secret_word, letters_guessed):
     while index < len(secret_word):
         if secret_word[index] not in letters_guessed:
             return False 
+        index+=1
 
     return True
 
@@ -53,9 +54,15 @@ def get_available_letters(letters_guessed):
       it return string which contains all characters except guessed letters
     Example :-
       letters_guessed = ['e', 'a'] then    
-      return sting is -> `bcdfghijklmnopqrstuvwxyz`
+      return sting is -> ``
     '''
-    letters_left = string.ascii_lowercase
+    x = "abcdefghijklmnopqrstuvwxyz"
+    index = 0
+    letters_left = ""
+    while index < len(x):
+        if x[index] not in letters_guessed : 
+            letters_left += x[index]
+        index+=1
     return letters_left
 
 
@@ -77,26 +84,32 @@ def hangman(secret_word):
     print("Welcome to the game, Hangman!")
     print("I am thinking of a word that is {} letters long.".format(
         str(len(secret_word))), end='\n\n')
-
     letters_guessed = []
+    wrong_guess = 0
+    res = False
+    while wrong_guess < 8 :
+        available_letters = get_available_letters(letters_guessed)
+        print("Available letters: {} ".format(available_letters))
 
-    available_letters = get_available_letters(letters_guessed)
-    print("Available letters: {} ".format(available_letters))
-
-    guess = input("Please guess a letter: ")
-    letter = guess.lower()
-
-    if letter in secret_word:
+        guess = input("Please guess a letter: ")
+        letter = guess.lower()
         letters_guessed.append(letter)
-        print("Good guess: {} ".format(
-            get_guessed_word(secret_word, letters_guessed)))
-        if is_word_guessed(secret_word, letters_guessed) == True:
-            print(" * * Congratulations, you won! * * ", end='\n\n')
-    else:
-        print("Oops! That letter is not in my word: {} ".format(
-            get_guessed_word(secret_word, letters_guessed)))
-        letters_guessed.append(letter)
+        if letter in secret_word:
+            print("Good guess: {} ".format(
+                get_guessed_word(secret_word, letters_guessed)))
+            if is_word_guessed(secret_word, letters_guessed) == True:
+                print(" * * Congratulations, you won! * * ", end='\n\n')
+                wrong_guess = 8
+                res = True
+        else:
+            print("Oops! That letter is not in my word: {} ".format(
+                get_guessed_word(secret_word, letters_guessed)))
+            print(IMAGES[wrong_guess]) 
+            wrong_guess += 1
         print("")
+    
+    if res == False : 
+        print ("You Lose the Game")
 
 
 # Load the list of words into the variable wordlist
