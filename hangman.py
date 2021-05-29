@@ -15,7 +15,12 @@ def is_word_guessed(secret_word, letters_guessed):
       return True (if user guess the world correctly )
       return False (wrong selection)
     '''
-    return False
+    index = 0 
+    while index < len(secret_word):
+        if secret_word[index] not in letters_guessed:
+            return False 
+
+    return True
 
 # if you want to test this function please call function -> get_guessed_word("kindness", [k, n, d])
 
